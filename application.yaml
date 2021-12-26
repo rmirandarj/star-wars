@@ -1,0 +1,6 @@
+PORT: "3000"
+LOG_LEVEL: "debug"
+MONGO_URI: mongodb://localhost:27017/planet?readPreference=primary
+MONGO_DB: planet
+MONGO_COLLECTION: planet
+MONGO_TIMEOUT: 1s
