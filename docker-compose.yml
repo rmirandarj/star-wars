@@ -20,7 +20,7 @@ services:
     environment:
       PORT: "3000"
       LOG_LEVEL: "debug"
-      MONGO_URI: mongodb://localhost:27017/planet?readPreference=primary
+      MONGO_URI: mongodb://mongo:27017/planet?readPreference=primary&connectTimeoutMS=5000&socketTimeoutMS=5000
       MONGO_DB: planet
       MONGO_COLLECTION: planet
       MONGO_TIMEOUT: 1s
