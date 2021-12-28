@@ -1,11 +1,10 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
   title: star-wars
   version: '1.0'
   contact:
     name: Raphael
     email: r.miranda93rj@gmail.com
-  summary: Star Wars API
   description: A simple CRUD for planets
 servers:
   - url: 'http://localhost:3000'
@@ -389,6 +388,10 @@ paths:
               x-examples:
                 example-1:
                   name: Mars
+            examples:
+              example-1:
+                value:
+                  name: Mars
         description: |-
           {
             "name":"Mars"
@@ -412,54 +415,6 @@ components:
         example-1:
           id: 61c90b90ed7c669157c9c022
           name: Mars
-      examples:
-        - id: 61c90b90ed7c669157c9c022
-          name: Mars
   securitySchemes: {}
-  requestBodies:
-    Planet-request-body:
-      content:
-        application/json:
-          schema:
-            description: ''
-            type: object
-            properties:
-              name:
-                type: string
-                minLength: 1
-            required:
-              - name
-            x-examples:
-              example-1:
-                name: Mars
-          examples:
-            example-1:
-              value:
-                name: Mars
-  responses:
-    Planet-response:
-      description: Example response
-      content:
-        application/json:
-          schema:
-            description: ''
-            type: object
-            properties:
-              id:
-                type: string
-                minLength: 1
-              name:
-                type: string
-                minLength: 1
-            required:
-              - id
-              - name
-            x-examples:
-              example-1:
-                id: 61c90b90ed7c669157c9c022
-                name: Mars
-          examples:
-            example-1:
-              value:
-                id: 61c90b90ed7c669157c9c022
-                name: Mars
+  requestBodies: {}
+  responses: {}
