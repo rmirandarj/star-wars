@@ -1,0 +1,465 @@
+openapi: 3.1.0
+info:
+  title: star-wars
+  version: '1.0'
+  contact:
+    name: Raphael
+    email: r.miranda93rj@gmail.com
+  summary: Star Wars API
+  description: A simple CRUD for planets
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /v1/planets:
+    parameters: []
+    post:
+      summary: ''
+      operationId: v1-post-planets
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Planet'
+              examples:
+                Planet Mars:
+                  value:
+                    id: 61c90b90ed7c669157c9c022
+                    name: Mars
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - error_code
+                  - message
+                x-examples:
+                  example-1:
+                    error_code: 'WA:007'
+                    message: failed to decode payload
+              examples:
+                example bad json:
+                  value:
+                    error_code: 'WA:007'
+                    message: failed to decode payload
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  details:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      required:
+                        - name
+                        - reason
+                      properties:
+                        name:
+                          type: string
+                          minLength: 1
+                        reason:
+                          type: string
+                          minLength: 1
+                required:
+                  - error_code
+                  - message
+                  - details
+                x-examples:
+                  example-1:
+                    error_code: 'WA:001'
+                    message: payload is invalid
+                    details:
+                      - name: Name
+                        reason: 'Key: ''planetRequest.Name'' Error:Field validation for ''Name'' failed on the ''required'' tag'
+              examples:
+                example with field required:
+                  value:
+                    error_code: 'WA:001'
+                    message: payload is invalid
+                    details:
+                      - name: Name
+                        reason: 'Key: ''planetRequest.Name'' Error:Field validation for ''Name'' failed on the ''required'' tag'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  error_code:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                  - error_code
+                x-examples:
+                  example-1:
+                    message: failed to insert the planet
+                    error_code: 'WA:001'
+              examples:
+                example:
+                  value:
+                    message: failed to insert the planet
+                    error_code: 'WA:002'
+      description: Create a planet.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+              required:
+                - name
+              x-examples:
+                example-1:
+                  name: Mars
+            examples:
+              Planet for creation:
+                value:
+                  name: string
+        description: |-
+          {
+            "name":"Mars"
+          }
+  '/v1/planets/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: ''
+      operationId: v1-get-planet-by-id
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  id:
+                    type: string
+                    minLength: 1
+                  name:
+                    type: string
+                    minLength: 1
+                required:
+                  - id
+                  - name
+                x-examples:
+                  example-1:
+                    id: 61ca2d3aba592ad938cf7e0f
+                    name: Mars
+              examples:
+                Planet Mars:
+                  value:
+                    id: 61ca2d3aba592ad938cf7e0f
+                    name: Mars
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - error_code
+                  - message
+                x-examples:
+                  example-1:
+                    error_code: 'WA:003'
+                    message: planet not found
+              examples:
+                example:
+                  value:
+                    error_code: 'WA:003'
+                    message: planet not found
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  error_code:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                  - error_code
+                x-examples:
+                  example-1:
+                    message: failed to insert the planet
+                    error_code: 'WA:002'
+              examples:
+                example:
+                  value:
+                    message: failed to retrieve a planet by id
+                    error_code: 'WA:004'
+      description: Retrieve a planet by id.
+    put:
+      summary: ''
+      operationId: v1-put-planets-by-id
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - error_code
+                  - message
+                x-examples:
+                  example-1:
+                    error_code: 'WA:007'
+                    message: failed to decode payload
+              examples:
+                example bad json:
+                  value:
+                    error_code: 'WA:007'
+                    message: failed to decode payload
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                required:
+                  - error_code
+                  - message
+                x-examples:
+                  example-1:
+                    error_code: 'WA:003'
+                    message: planet not found
+              examples:
+                example-1:
+                  value:
+                    error_code: 'WA:003'
+                    message: planet not found
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    error_code: 'WA:001'
+                    message: payload is invalid
+                    details:
+                      - name: Name
+                        reason: 'Key: ''planetRequest.Name'' Error:Field validation for ''Name'' failed on the ''required'' tag'
+                properties:
+                  error_code:
+                    type: string
+                    minLength: 1
+                  message:
+                    type: string
+                    minLength: 1
+                  details:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          minLength: 1
+                        reason:
+                          type: string
+                          minLength: 1
+                      required:
+                        - name
+                        - reason
+                required:
+                  - error_code
+                  - message
+              examples:
+                example field required:
+                  value:
+                    error_code: 'WA:001'
+                    message: payload is invalid
+                    details:
+                      - name: Name
+                        reason: 'Key: ''planetRequest.Name'' Error:Field validation for ''Name'' failed on the ''required'' tag'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                properties:
+                  message:
+                    type: string
+                    minLength: 1
+                  error_code:
+                    type: string
+                    minLength: 1
+                required:
+                  - message
+                  - error_code
+                x-examples:
+                  example-1:
+                    message: failed to insert the planet
+                    error_code: 'WA:002'
+              examples:
+                example:
+                  value:
+                    message: failed to update the planet
+                    error_code: 'WA:002'
+      description: Update a planet by id.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+              required:
+                - name
+              x-examples:
+                example-1:
+                  name: Mars
+        description: |-
+          {
+            "name":"Mars"
+          }
+components:
+  schemas:
+    Planet:
+      description: Model of a Planet
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+      required:
+        - id
+        - name
+      x-examples:
+        example-1:
+          id: 61c90b90ed7c669157c9c022
+          name: Mars
+      examples:
+        - id: 61c90b90ed7c669157c9c022
+          name: Mars
+  securitySchemes: {}
+  requestBodies:
+    Planet-request-body:
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+            required:
+              - name
+            x-examples:
+              example-1:
+                name: Mars
+          examples:
+            example-1:
+              value:
+                name: Mars
+  responses:
+    Planet-response:
+      description: Example response
+      content:
+        application/json:
+          schema:
+            description: ''
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 1
+              name:
+                type: string
+                minLength: 1
+            required:
+              - id
+              - name
+            x-examples:
+              example-1:
+                id: 61c90b90ed7c669157c9c022
+                name: Mars
+          examples:
+            example-1:
+              value:
+                id: 61c90b90ed7c669157c9c022
+                name: Mars

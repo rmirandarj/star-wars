@@ -4,7 +4,7 @@ This project is a CRUD of saved planets in MongoDB
 
 ## Technologies used.
 
-- GO 1.16 (Mux, Logrus, Validator, Tests with docker images, Testify)
+- GO 1.16 (Mux, Logrus, Validator, Dockertest, Testify)
 - Mongo 4
 - Docker
 - Docker-compose
@@ -28,4 +28,4 @@ Need to have GO installed.
 
 ## To access documentation
 
-- http://localhost:3000/swagger/index.html
+- docs/swagger.yaml

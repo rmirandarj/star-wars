@@ -48,7 +48,7 @@ func (a *App) handleCreatePlanet(saver PlanetInserter) http.Handler {
 		saved, err := saver.Insert(ctx, doc)
 		if err != nil {
 			logger.Error(err.Error())
-			writeJsonResponse(w, http.StatusInternalServerError, errorMessage{Message: "failed to insert the planet", ErrorCode: "WA:001"})
+			writeJsonResponse(w, http.StatusInternalServerError, errorMessage{Message: "failed to insert the planet", ErrorCode: "WA:002"})
 			return
 		}
 
