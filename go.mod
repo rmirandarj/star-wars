@@ -7,6 +7,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
 	github.com/ory/dockertest/v3 v3.8.1
+	github.com/prometheus/client_golang v1.11.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.10.0
 	github.com/stretchr/testify v1.7.0

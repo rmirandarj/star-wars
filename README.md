@@ -8,6 +8,8 @@ This project is a CRUD of saved planets in MongoDB
 - Mongo 4
 - Docker
 - Docker-compose
+- Prometheus
+- Grafana
 - Swagger
 - Make
 
@@ -29,3 +31,7 @@ Need to have GO installed.
 ## To access documentation
 
 - docs/swagger.yaml
+
+## To view a simple monitoring dashboard
+
+- monitoring/*

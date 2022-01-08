@@ -14,6 +14,7 @@ import (
 	"github.com/spf13/viper"
 	driver "go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type App struct {
@@ -71,9 +72,11 @@ func mongoCollection() *driver.Collection {
 func (a *App) RegisterRoutes() {
 	router := mux.Router{}
 
+	router.Use(a.HTTPServerMetricMiddleware)
 	router.Use(a.RequestIdMiddleware)
 
 	router.Handle("/health", a.healthHandler()).Methods(http.MethodGet)
+	router.Handle("/metrics", promhttp.Handler()).Methods(http.MethodGet)
 	router.Handle("/v1/planets", a.handleCreatePlanet(a.container.planetInserter)).Methods(http.MethodPost)
 	router.Handle("/v1/planets/{id}", a.handleGetPlanetByID(a.container.planetGetter)).Methods(http.MethodGet)
 	router.Handle("/v1/planets/{id}", a.handleUpdatePlanet(a.container.planetUpdater)).Methods(http.MethodPut)
@@ -86,7 +89,7 @@ func (a App) healthHandler() http.HandlerFunc {
 	}
 	return func(w http.ResponseWriter, request *http.Request) {
 		writeJsonResponse(w, http.StatusOK, response{
-			Message: "OK",
+			Message: "UP",
 		})
 	}
 }

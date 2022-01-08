@@ -1,4 +1,4 @@
-PORT: "3000"
+PORT: "8080"
 LOG_LEVEL: "debug"
 MONGO_URI: mongodb://localhost:27017/planet?readPreference=primary
 MONGO_DB: planet

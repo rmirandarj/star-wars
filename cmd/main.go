@@ -14,13 +14,14 @@ import (
 )
 
 func main() {
+	viper.SetConfigType("yaml")
 	viper.SetConfigName("application")
 	viper.AddConfigPath("/app")
 	viper.AddConfigPath("$HOME/")
 	viper.AddConfigPath("$HOME/config")
 	viper.AddConfigPath(".")
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("couldn't read config filev 'application.yaml': %v\n", err.Error())
+		fmt.Printf("couldn't read config file 'application.yaml': %v\n", err.Error())
 	}
 
 	viper.AutomaticEnv()
