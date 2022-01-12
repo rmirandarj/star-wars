@@ -19,7 +19,7 @@ import (
 
 type App struct {
 	router    *mux.Router
-	container *Container
+	container *container
 	server    *http.Server
 }
 
