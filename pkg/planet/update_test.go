@@ -2,6 +2,7 @@ package planet
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -39,10 +40,10 @@ func Test_service_Update(t *testing.T) {
 	id2, _ := primitive.ObjectIDFromHex("5f165e2e4de9b442e60b3905")
 
 	tests := []struct {
-		name             string
-		givenPlanet      Planet
-		wantMatchedCount int64
-		wantError        bool
+		name        string
+		givenPlanet Planet
+		wantErr     bool
+		wantErrType error
 	}{
 		{
 			name: "when the planet exists, then it should update with success",
@@ -50,27 +51,28 @@ func Test_service_Update(t *testing.T) {
 				ID:   existingPlanet.ID,
 				Name: "New Mars",
 			},
-			wantMatchedCount: 1,
 		},
 		{
-			name: "when the planet does not exist, then it should return an error",
+			name: "when the planet does not exist, then it should return planet not found err",
 			givenPlanet: Planet{
 				ID:   id2,
 				Name: "New Mars",
 			},
-			wantMatchedCount: 0,
-
+			wantErr:     true,
+			wantErrType: ErrPlanetNotFound,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			matchedCount, err := s.Update(ctx, tt.givenPlanet)
-			if err != nil {
-				t.Fatalf("service.Update() unexpected error %v", err)
-			}
-			assert.Equal(t, tt.wantMatchedCount, matchedCount, "service.Update() unexpected planet matchedCount")
 
-			if matchedCount > 0 {
+			if _, err := s.Update(ctx, tt.givenPlanet); err != nil {
+				if tt.wantErr && !errors.Is(err, tt.wantErrType) {
+					t.Errorf("service.Update() errorType = %v, wantErrorType %v", err, tt.wantErrType)
+				}
+				if !tt.wantErr {
+					t.Errorf("service.Update() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			} else {
 				p, err := s.GetByID(ctx, tt.givenPlanet.ID.Hex())
 				if err != nil {
 					t.Fatalf("service.Update() an error occurred retrieving a planet for test")

@@ -87,18 +87,17 @@ func (a *App) handleUpdatePlanet(planetUpdater PlanetUpdater) http.HandlerFunc {
 			ID:   objectID,
 			Name: planetRequest.Name,
 		}
-		matchedCount, err := planetUpdater.Update(ctx, doc)
-		if err != nil {
+		
+		if _, err := planetUpdater.Update(ctx, doc); err != nil {
 			logger.Error(err.Error())
+			if errors.Is(err, planet.ErrPlanetNotFound) {
+				writeJsonResponse(w, http.StatusNotFound, errorMessage{Message: "planet not found", ErrorCode: "WA:003"})
+				return
+			}
 			writeJsonResponse(w, http.StatusInternalServerError, errorMessage{Message: "failed to update the planet", ErrorCode: "WA:001"})
 			return
 		}
 
-		if matchedCount == 0 {
-			logger.Error(err.Error())
-			writeJsonResponse(w, http.StatusNotFound, errorMessage{Message: "planet not found", ErrorCode: "WA:003"})
-			return
-		}
 		writeJsonResponse(w, http.StatusNoContent, nil)
 	})
 }
